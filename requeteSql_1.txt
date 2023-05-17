@@ -1,0 +1,172 @@
+# ------------------------------------------------------------------- #
+                        - Requêtes SQL -
+# ------------------------------------------------------------------- #
+
+
+
+1- #   - SELECT -   #
+
+** Afficher tous les personnages **
+select * from personnage;
+
+** Afficher la liste des armes **
+select * from arme;
+
+** Afficher seulement le nom et le « level » minimum de toutes les armes **
+select nom,levelMin from arme;
+
+** Afficher le nom, le surnom et le « level » de tous les personnages **
+select nom,surnom,level from personnage;
+
+
+#   - RENAME -   #
+
+** Afficher le nom et le niveau de tous les personnages en modifiant les titres des colonnes en « Pseudo » et « Niveau » **
+select nom as Pseudo , level as Niveau from personnage;
+
+** Afficher le type des armes en renommant le type en « Types d’armes du jeu » **
+select libelle as `Types armes du jeu` from typearme;
+
+
+
+
+
+
+
+2- #   - CALCUL -   #
+
+** Récupérer le nombre d’armes existantes **
+select count(*) from arme; //  == 10
+
+** Afficher le nombre de personnages du jeu (attention au nom de la colonne) **
+select count(*) from personnage; //  == 7
+
+** Récupérer la moyenne des niveaux des personnages du jeu **
+select avg(niveau) from personnage; //  == 0
+
+// - tous les niveau était à zéro alors j'ai du tout ré-update pour chaques personnages xD ...
+UPDATE personnage
+    SET niveau = 10
+    WHERE idPersonnage = 7;
+//
+
+select avg(niveau) from personnage; //  == 8.5714
+
+** Récupérer la somme des points de force, d’agilité e d’intelligence de toutes les classes **
+select sum(baseForce) as `Points de force`, sum(baseAgi) as `Points d'agilité`, sum(baseIntel) as `Points d'intelligence` from classe; //  == 13 11 9
+
+** Récupérer le « level » Minimum et Maximum des armes du jeu **
+select MIN(levelMin) as `Min(levelMin)`, MAX(levelMin) as `MAX(levelMin)` from arme; ==  1 / 10
+
+** Additionner le nombre de points de caractéristique de toutes les classes **
+select nom, sum(baseForce + baseAgi + baseIntel) as `Points de caractéristiques` from classe group by idClasse;
+
+
+
+
+
+
+
+3- #   - CONCAT -   #
+
+** Afficher le nom et le surnom des personnages dans une seule colonne (Concaténation) **
+select CONCAT( nom,surnom) as personnage from personnage;
+
+** Afficher le nom des classes avec les points de caractéristique dans une seule colonne **
+select CONCAT( nom,' ','-',' ','F: ',baseForce,' ','-',' ','A: ',baseAgi,' ','-',' ','I: ',baseIntel) as Classe from classe;
+
+** Afficher les 6 premières lettres des noms des personnages **
+select substr(nom,1, 6) from personnage;
+
+** Afficher 5 premières lettres du nom des classes concaténées au 20 premières lettres de la description **
+select concat(substr(nom,1, 6),` - `,substr(description,1,20)) from classe;
+
+
+
+
+
+
+
+4- #   - WHERE -   #
+
+** Récupérer toutes les armes dont le « level » minimum est de 5 **
+select * from arme where levelMin>4;
+
+** Récupérer toutes les armes ayant un nombre de dégâts inférieur à 25 **
+select * from arme where degat<25;
+
+** Récupérer tous les personnages ayant le « level » 10 et n’affiche que leur nom et leur surnom **
+select nom , surnom from personnage where level=10;
+
+** Récupérer toutes les armes à distance **
+select * from typearme where estDistance=1;
+
+
+
+
+
+
+
+5- #   - AND / OR / BETWEEN -   #
+
+** Récupérer toutes les armes ayant un « level » minimum compris entre 4 et 8 (inclus) **
+select * from arme where levelMin between 4 and 8;
+
+ ** Récupérer tous les personnages ayant un identifiant inférieur à 3 et un « level » égal à 10 **
+select * from personnage where idPersonnage<4 and level = 10;
+
+** Récupérer toutes les armes ayant un « level » minimum inférieur à 4 ou supérieur à 8 (inclus) **
+select * from arme where levelMin<4 or levelMin>7;
+
+** Récupérer les armes 1, 2 et toutes les armes ayant un nombre de dégâts supérieur à 30 **
+select * from arme where idArme = 1 or idArme =2 or  degat > 29;
+
+** Récupérer l’arme 1 et l’arme 2 et les armes ayant un nombre de dégâts compris entre 25 et 40 **
+select * from arme where idArme = 1 or idArme =2 or  degat > 24 and degat<41;
+
+** Récupérer les personnages ayant un « level » différent de 8 et un « level » supérieur à 7 ou ayant un « level » inférieur à 6. **
+select * from personnage where level<6 or level>7  and level!=8;
+
+** Récupérer le nombre de personnage qui n’ont pas le « level » 10 **
+select count(*) from personnage where level != 10;
+
+** Récupérer la moyenne des dégâts des armes ayant un « level » compris entre 3 et 7 **
+select avg(degat) from arme where levelMin>2 and levelMin<8;
+
+
+
+
+
+
+
+6- #   - LIKE / IN LIMIT / OFFSET / IS NULL -   #
+
+** Récupérer les personnages qui ont un nom commençant par la lettre « l » **
+select * from personnage where nom like 'l%';
+
+** Récupérer les personnages qui ont un nom commençant par la lettre « l » et se terminent par « er » **
+select * from personnage where nom like 'l%' and nom like '%er';
+
+** Récupérer les armes contenant le mot « bois » **
+select * from arme where nom like '%bois%';
+
+** Récupérer les armes commençant par A et ayant en troisième lettre B **
+select * from arme where nom like 'A_b%';
+
+** Récupérer les armes ayant comme identifiant 1,2,4,5,7 **
+select * from arme where idArme!=3 and idArme!=6 limit 5;
+
+** Récupérer les personnages ayant l’identifiant 2,3,4 et 6 et qui ont un « level » 10 **
+select * from personnage where idPersonnage>1 and idPersonnage<7 and  level=10;
+
+** Récupérer les personnages ayant un surnom **
+select * from personnage where surnom is not null;
+
+** Récupérer le personnage n’ayant pas de surnom **
+select * from personnage where surnom is null;
+
+** Récupérer les 3 premières lignes de personnages **
+select * from personnage limit 3;
+
+** Récupérer les lignes 4 et 5 de la table « personnage » **
+select * from personnage limit 3,2;
