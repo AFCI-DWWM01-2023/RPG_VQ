@@ -2,7 +2,9 @@
                         - Requêtes SQL -
 # ------------------------------------------------------------------- #
 
-
+# ----------------------------- #
+            - PDF 1 -
+# ----------------------------- #
 
 1- #   - SELECT -   #
 
@@ -170,3 +172,66 @@ select * from personnage limit 3;
 
 ** Récupérer les lignes 4 et 5 de la table « personnage » **
 select * from personnage limit 3,2;
+
+
+# ----------------------------- #
+            - PDF 2 -
+# ----------------------------- #
+
+
+1- #   -  Les jointures internes -   #
+
+** Récupérer tous les personnages et leur classe **
+SELECT * FROM personnage JOIN classe ON personnage.idClasse = classe.idClasse;
+
+** Récupérer toutes les armes et leur type, vous devez afficher seulement le nom de l’arme, le level minimum, les dégâts de l’arme, le libelle, et le champ est à distance **
+select nom, levelMin, libelle, estDistance from arme natural join typearme;
+
+
+
+2- #   -  Les jointures et surnoms de tables -   #
+
+** Récupérer le nom des personnages et le nom de leur classe **
+select personnage.nom, classe.nom from personnage inner join classe on personnage.idClasse = classe.idClasse;
+
+** Récupérer l’arme qui est utilisée par chaque personnage **
+select personnage.nom, arme.nom, arme.levelMin, arme.degat from personnage join arme where personnage.idArmeUtilise = arme.idArme;
+
+** Récupérer l’arme qui est utilisée par chaque personnage et le type d’arme **
+select personnage.nom, arme.nom, arme.levelMin, arme.degat, typearme.libelle, typearme.estDistance from personnage join arme, typearme where personnage.idArmeUtilise = arme.idArme and arme.idTypeArme = typearme.idTypearme;
+
+
+2- #   -  Jointures er filtres -   #
+
+** Récupérer toutes les armes de tous les personnages **
+select personnage.nom,personnage.level, arme.nom, arme.levelMin from personnage join arme, typearme where personnage.idArmeUtilise = arme.idArme and arme.idTypeArme = typearme.idTypearme;
+
+** Récupérer toutes les armes qui ne sont pas à distance **
+select arme.nom, arme.levelMin, arme.degat, typearme.libelle from arme join typearme where arme.idTypeArme = typearme.idTypeArme and typearme.estDistance !=1;
+
+** Récupérer l’arme utilisée par chaque guerrier **
+select personnage.nom, arme.nom, typearme.libelle from personnage 
+inner join classe on personnage.idClasse = classe.idClasse
+inner join arme on personnage.idArmeUtilise = arme.idArme
+inner join typearme on arme.idTypeArme = typearme.idTypearme
+where classe.nom = 'Guerrier';
+
+** Récupérer toutes les armes dont disposent les joueurs ayant le level 10 **
+select personnage.idPersonnage,personnage.nom, arme.nom, typearme.libelle from personnage 
+inner join arme on personnage.idArmeUtilise = arme.idArme
+inner join typearme on arme.idTypeArme = typearme.idTypearme
+where level = 10;
+
+** Récupérer toutes les armes dont disposent les joueurs ayant le level 10, triées par id Personnage **
+select personnage.idPersonnage,personnage.nom, arme.nom, typearme.libelle from personnage 
+inner join arme on personnage.idArmeUtilise = arme.idArme
+inner join typearme on arme.idTypeArme = typearme.idTypearme
+where level = 10
+order by personnage.idPersonnage;
+
+** Récupérer la moyenne des dégats des armes à distance **
+select avg(arme.degat) as `Moyenne des dégats des armes à distance` from arme
+inner join typearme on arme.idTypeArme = typearme.idTypeArme
+where typearme.estDistance = 1;
+
+** Récupérer tous les personnages disposant d’une arme d’un type commençant par « a » **
