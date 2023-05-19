@@ -352,3 +352,38 @@ select arme.nom, count(*) as `Nb de joueurs` from arme right join dispose on arm
 ** Afficher le nombre d’arme par type d’arme mais ne prendre que les armes de corps à corps présentes au maximum 1 fois **
 select typearme.libelle as `Type d'arme`, count(idArme) as `Nb d'armes` from arme right join typearme on typearme.idTypeArme = arme.idTypeArme where estDistance = 0 group by typearme.idTypeArme having count(idArme)<2;
  
+
+
+
+
+
+# ----------------------------- #
+            - PDF 3 -
+# ----------------------------- #
+
+
+
+
+
+
+1- #   -  Les requêtes imbriquées -   #
+
+** Récupérer les armes ayant un nombre de dégâts supérieurs à la moyenne du nombre de dégâts de toutes les armes **
+select nom , degat from arme  group by idArme having degat > (select avg(degat) from arme);
+ 
+** Récupérer les personnages ayant un « level » inférieur à la moyenne **
+select * from personnage  group by idPersonnage having level < (select avg(level) from personnage);
+ 
+** Récupérer les personnages ayant un « level » supérieur à la moyenne des archers **
+select * from personnage  group by idPersonnage having level > (select avg(level) from personnage join classe on personnage.idClasse = classe.idClasse where classe.nom = 'Archer');
+ 
+ 
+
+
+
+
+2- #   -  Des requêtes imbriquées plus complexes -   #
+
+**  Pour les armes à distances, récupérer le nombre maximum d’occurrence du type d’arme **
+select count(typearme.estDistance) as `Nb d'arme à distance` from typearme inner join arme on typearme.idTypeArme = arme.idTypeArme inner join personnage on arme.idArme = personnage.idArmeUtilise where typearme.estDistance=1;
+ 
