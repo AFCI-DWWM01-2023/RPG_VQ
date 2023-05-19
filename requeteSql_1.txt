@@ -254,3 +254,42 @@ select * from personnage right join arme on arme.idArme = personnage.idArmeUtili
 
 ** Récupérer toutes les armes et voir les personnages qui les ont en leur possession (table dispose), avec RIGHT JOIN (ordonné) **
 select arme.idArme, arme.nom as Arme , personnage.nom from dispose right join arme on arme.idArme = dispose.idArme right join personnage on personnage.idPersonnage = dispose.idPersonnage order by arme.idArme;
+
+
+# ----------------------------- #
+            - PDF 3 -
+# ----------------------------- #
+
+
+1- #   -  Regroupement et GROUP BY -   #
+
+** Afficher le nombre d’arme par type d’arme **
+select typearme.libelle as `Type d'arme`, count(idArme) as `Nb d'armes` from arme right join typearme on typearme.idTypeArme = arme.idTypeArme group by typearme.idTypeArme;
+ 
+** Afficher le nombre de personnage par classe **
+select classe.nom as `Classe`, classe.description, count(idPersonnage) as `Nb de joueurs` from classe right join personnage on classe.idClasse = personnage.idClasse group by classe.idClasse;
+ 
+** Afficher le nombre d’armes dont dispose chaque personnage **
+select personnage.nom, count(*) from personnage right join dispose on personnage.idPersonnage = dispose.idPersonnage group by personnage.idPersonnage;
+ 
+** Afficher le nombre d’armes dont dispose chaque personnage mais seulement les guerriers **
+select personnage.nom, count(*) from personnage right join dispose on personnage.idPersonnage = dispose.idPersonnage join classe on personnage.idClasse = classe.idClasse where classe.nom = 'Guerrier' group by personnage.idPersonnage;
+ 
+** Afficher le nombre de personnage par arme **
+select arme.nom, count(*) as `Nb de joueurs` from arme right join dispose on arme.idArme = dispose.idArme group by arme.idArme;
+ 
+** Afficher le niveau moyen de chaque classe **
+select classe.nom as `Classe`, avg(personnage.level) as `Niveau moyen` from classe right join personnage on classe.idClasse = personnage.idClasse group by classe.idClasse;
+ 
+
+2- #   -  Regroupement et HAVING -   #
+
+** Afficher le niveau moyen de chaque classe et ne récupérer que les classes ayant un niveau minimum de 9 **
+select classe.nom as `Classe`, avg(personnage.level) as `Niveau moyen` from classe right join personnage on classe.idClasse = personnage.idClasse group by classe.idClasse having avg(personnage.level) > 8;
+ 
+** Afficher le nombre de personnage par arme et ne garder que les armes ayant entre 1 et 2 utilisateurs (table dispose) **
+select arme.nom, count(*) as `Nb de joueurs` from arme right join dispose on arme.idArme = dispose.idArme group by arme.idArme having count(*)<3;
+ 
+** Afficher le nombre d’arme par type d’arme mais ne prendre que les armes de corps à corps présentes au maximum 1 fois **
+select typearme.libelle as `Type d'arme`, count(idArme) as `Nb d'armes` from arme right join typearme on typearme.idTypeArme = arme.idTypeArme where estDistance = 0 group by typearme.idTypeArme having count(idArme)<2;
+ 
