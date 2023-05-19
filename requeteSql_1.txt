@@ -235,3 +235,17 @@ inner join typearme on arme.idTypeArme = typearme.idTypeArme
 where typearme.estDistance = 1;
 
 ** Récupérer tous les personnages disposant d’une arme d’un type commençant par « a » **
+select personnage.nom from personnage inner join arme on personnage.idArmeUtilise = arme.idArme inner join typearme on arme.idTypeArme = typearme.idTypeArme where typearme.libelle like 'a%';
+
+** Récupérer tous les types d’armes même ceux qui n’ont pas d’arme associée **
+select typearme.libelle as Type , arme.nom as Arme from typearme inner join arme on typearme.idTypeArme = arme.idTypeArme;
+
+** Récupérer tous les types d’armes, et afficher les armes pour chaque type (même les types qui n’ont pas d’arme). Avec un RIGHT JOIN **
+select typearme.libelle as Type , arme.nom as Arme from arme  RIGHT join typearme on arme.idTypeArme = typearme.idTypeArme;
+
+
+** Récupérer toutes les armes et afficher le personnage qui les utilise, ordonnées par le level minimum(l’objectif est de récupérer toutes armes et d’associer les personnages) **
+select * from personnage right join arme on arme.idArme = personnage.idArmeUtilise order by arme.levelMin;
+
+** Récupérer toutes les armes et voir les personnages qui les ont en leur possession (table dispose), avec RIGHT JOIN (ordonné) **
+select arme.idArme, arme.nom as Arme , personnage.nom from dispose right join arme on arme.idArme = dispose.idArme right join personnage on personnage.idPersonnage = dispose.idPersonnage order by arme.idArme;

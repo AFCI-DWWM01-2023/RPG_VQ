@@ -41,16 +41,16 @@ CREATE TABLE `arme` (
 --
 
 INSERT INTO `arme` (`idArme`, `nom`, `levelMin`, `degat`, `idTypeArme`) VALUES
-(1, 'HacheDuLyon', 1, 10, 1),
-(2, 'HacheDeFeu', 3, 20, 1),
-(3, 'HachedeGlace', 7, 35, 1),
+(1, 'Hache du Lyon', 1, 10, 1),
+(2, 'Hache de feu', 3, 20, 1),
+(3, 'Hache de glace', 7, 35, 1),
 (4, 'Arc en bois', 1, 5, 2),
 (5, 'Arc en bois debene', 5, 15, 2),
 (6, 'Arc des anges', 9, 30, 2),
 (7, 'Excalibur', 10, 65, 3),
 (8, 'Arbalete givrante', 4, 15, 4),
 (9, 'Dague de voleur', 2, 7, 6),
-(10, 'Dage de contrebandier', 6, 14, 6);
+(10, 'Dague de contrebandier', 6, 14, 6);
 
 -- --------------------------------------------------------
 
