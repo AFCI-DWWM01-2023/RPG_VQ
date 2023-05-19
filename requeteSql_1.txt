@@ -358,7 +358,7 @@ select typearme.libelle as `Type d'arme`, count(idArme) as `Nb d'armes` from arm
 
 
 # ----------------------------- #
-            - PDF 3 -
+            - PDF 4 -
 # ----------------------------- #
 
 
@@ -386,4 +386,79 @@ select * from personnage  group by idPersonnage having level > (select avg(level
 
 **  Pour les armes à distances, récupérer le nombre maximum d’occurrence du type d’arme **
 select count(typearme.estDistance) as `Nb d'arme à distance` from typearme inner join arme on typearme.idTypeArme = arme.idTypeArme inner join personnage on arme.idArme = personnage.idArmeUtilise where typearme.estDistance=1;
+ 
+
+
+
+
+
+# ----------------------------- #
+            - PDF 5 -
+# ----------------------------- #
+
+
+
+
+
+CREATE TABLE `attaque` (
+  `idAttaque` int(11) NOT NULL,
+  `nom` varchar(60) NOT NULL,
+  `baseDegat` int(10) NOT NULL,
+  `test` TINYINT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `attaque`
+  ADD PRIMARY KEY (`idAttaque`);
+ 
+ 
+ALTER TABLE `attaque`
+  MODIFY `idAttaque` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ 
+ 
+ALTER TABLE `attaque`
+  MODIFY `test` varchar(50);
+ 
+
+alter table attaque
+ change `test` `toto` int not null;
+ 
+alter table attaque
+ drop `toto`;
+ 
+CREATE TABLE `utilise` (
+  `idAttaque` int(11) NOT NULL,
+  `idPersonnage` int(11) NOT NULL,
+  `levelAttaque` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `utilise`
+  ADD KEY `FK_ID_ATTAQUE` (`idAttaque`);
+ 
+INSERT INTO `attaque` (`idAttaque`, `nom`, `baseDegat`) VALUES
+(1, 'attaque1', 5),
+(2, 'attaque2', 10),
+(3, 'attaque3', 15),
+(4, 'attaque4', 20);
+ 
+INSERT INTO `utilise` (`idAttaque`, `idPersonnage`, `levelAttaque`) VALUES
+(1, 1, 2),
+(2, 1, 2),
+(2, 2, 1),
+(4, 3, 2),
+(1, 4, 3),
+(4, 5, 3);
+ 
+update attaque set `baseDegat` = 10;
+ 
+update attaque set `baseDegat` = 50 where idAttaque in(2,3);
+ 
+alter table personnage add `dateNaissance` date;
+ 
+update personnage set dateNaissance = '2001-01-01' where idPersonnage = 1;
+update personnage set dateNaissance = '2001-02-01' where idPersonnage = 2;
+update personnage set dateNaissance = '2002-03-01' where idPersonnage = 3;
+update personnage set dateNaissance = '2003-06-01' where idPersonnage = 4;
+update personnage set dateNaissance = '2001-04-01' where idPersonnage = 5;
+update personnage set dateNaissance = '2007-02-01' where idPersonnage = 6;
+update personnage set dateNaissance = '2003-05-01' where idPersonnage = 7;
  
