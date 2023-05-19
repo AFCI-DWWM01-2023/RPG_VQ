@@ -2,9 +2,19 @@
                         - Requêtes SQL -
 # ------------------------------------------------------------------- #
 
+
+
+
+
+
 # ----------------------------- #
             - PDF 1 -
 # ----------------------------- #
+
+
+
+
+
 
 1- #   - SELECT -   #
 
@@ -19,6 +29,11 @@ select nom,levelMin from arme;
 
 ** Afficher le nom, le surnom et le « level » de tous les personnages **
 select nom,surnom,level from personnage;
+
+
+
+
+
 
 
 #   - RENAME -   #
@@ -174,9 +189,19 @@ select * from personnage limit 3;
 select * from personnage limit 3,2;
 
 
+
+
+
+
+
 # ----------------------------- #
             - PDF 2 -
 # ----------------------------- #
+
+
+
+
+
 
 
 1- #   -  Les jointures internes -   #
@@ -186,6 +211,10 @@ SELECT * FROM personnage JOIN classe ON personnage.idClasse = classe.idClasse;
 
 ** Récupérer toutes les armes et leur type, vous devez afficher seulement le nom de l’arme, le level minimum, les dégâts de l’arme, le libelle, et le champ est à distance **
 select nom, levelMin, libelle, estDistance from arme natural join typearme;
+
+
+
+
 
 
 
@@ -199,6 +228,11 @@ select personnage.nom, arme.nom, arme.levelMin, arme.degat from personnage join 
 
 ** Récupérer l’arme qui est utilisée par chaque personnage et le type d’arme **
 select personnage.nom, arme.nom, arme.levelMin, arme.degat, typearme.libelle, typearme.estDistance from personnage join arme, typearme where personnage.idArmeUtilise = arme.idArme and arme.idTypeArme = typearme.idTypearme;
+
+
+
+
+
 
 
 3- #   -  Jointures er filtres -   #
@@ -215,6 +249,11 @@ inner join classe on personnage.idClasse = classe.idClasse
 inner join arme on personnage.idArmeUtilise = arme.idArme
 inner join typearme on arme.idTypeArme = typearme.idTypearme
 where classe.nom = 'Guerrier';
+
+
+
+
+
 
 
 4- #   -  Jointures, calculs et tris -   #
@@ -241,6 +280,11 @@ where typearme.estDistance = 1;
 select personnage.nom from personnage inner join arme on personnage.idArmeUtilise = arme.idArme inner join typearme on arme.idTypeArme = typearme.idTypeArme where typearme.libelle like 'a%';
 
 
+
+
+
+
+
 5- #   -  Les jointures externes -   #
 
 ** Récupérer tous les types d’armes même ceux qui n’ont pas d’arme associée **
@@ -256,9 +300,19 @@ select * from personnage right join arme on arme.idArme = personnage.idArmeUtili
 select arme.idArme, arme.nom as Arme , personnage.nom from dispose right join arme on arme.idArme = dispose.idArme right join personnage on personnage.idPersonnage = dispose.idPersonnage order by arme.idArme;
 
 
+
+
+
+
+
 # ----------------------------- #
             - PDF 3 -
 # ----------------------------- #
+
+
+
+
+
 
 
 1- #   -  Regroupement et GROUP BY -   #
@@ -281,6 +335,11 @@ select arme.nom, count(*) as `Nb de joueurs` from arme right join dispose on arm
 ** Afficher le niveau moyen de chaque classe **
 select classe.nom as `Classe`, avg(personnage.level) as `Niveau moyen` from classe right join personnage on classe.idClasse = personnage.idClasse group by classe.idClasse;
  
+
+
+
+
+
 
 2- #   -  Regroupement et HAVING -   #
 
